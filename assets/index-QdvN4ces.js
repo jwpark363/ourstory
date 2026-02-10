@@ -233,5 +233,6 @@ table {
   }
   body {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    background-color: #f5f5f5;
   }
 `;F_.createRoot(document.getElementById("root")).render(ne.jsxs(ze.StrictMode,{children:[ne.jsx(O3,{}),ne.jsx(C3,{})]}));
