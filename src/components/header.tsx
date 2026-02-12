@@ -11,11 +11,11 @@ const Wrapper = styled.div`
     justify-content: space-between;
     align-items: center;
     color: FloralWhite;
-    h1{
-        margin-left: 24px;
-        font-size: 20px;
-        font-weight: bold;
-    }
+`
+const Title = styled.h1`
+    margin-left: 24px;
+    font-size: 20px;
+    font-weight: bold;
 `
 const Menu = styled.div`
     display: flex;
@@ -49,9 +49,9 @@ export default function Header({ user, openLogin, openJoin, onClose, handleLogou
     }
     return(
         <Wrapper>
-            <h1>
+            <Title>
                 우리들의 이야기
-            </h1>
+            </Title>
             <Menu>
             {user ? 
                 <Button onClick={logout}>

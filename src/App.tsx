@@ -8,7 +8,11 @@ import { type User } from "firebase/auth";
 import Header from "./components/header";
 import Bottom from "./components/bottom";
 import { ToastContainer } from "react-toastify";
+import { LibraryBig, Pencil, Plus } from "lucide-react";
+import Post from "./components/new_post";
+import { ConfirmProvider } from "./components/use-confirm__";
 const Wrapper = styled.div`
+  position: relative;
   max-width: 800px;
   min-width: 412px;
   height: 100vh;
@@ -16,21 +20,43 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: CadetBlue;
   color: White;
 `
 const Contents = styled.div`
   flex: 1;
   width: 100%;
-  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid white;
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-color: CadetBlue;
+  opacity: 0.9;
+  h1{
+    color: brown;
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
 `;
+const AddPostButton = styled.div`
+  position: absolute;
+  top: 4px;
+  left: 184px;
+  width: 30px;
+  height: 30px;
+  border: 1px solid white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+`
 function App() {
   const [user, setUser] = useState<User | null>(null)
   const [is_login, setLogin] = useState(false)
   const [is_join, setJoin] = useState(false)
+  const [is_post, setPost] = useState(false)
   useEffect(() => {
     (async () => {
       await auth.authStateReady();
@@ -65,10 +91,15 @@ function App() {
   return (
     <Wrapper>
       <Header user={user} openLogin={openLogin} openJoin={openJoin} onClose={onClose} handleLogout={handleLogout}/>
+      <AddPostButton onClick={() => setPost(true)}>
+        <Plus size={14} />
+        <Pencil size={18} />
+      </AddPostButton>
       <Contents>
-        <h1>우리들의 이야기</h1>
+        <h1><LibraryBig size={24}/> 우리들의 이야기</h1>
         {is_login && <Login onClose={()=>setLogin(false)} handleLogin={handleLogin}/>}
         {is_join && <Join onClose={()=>setJoin(false)} handleLogin={handleLogin}/> }
+        {is_post &&  <Post user={user} onClose={() => setPost(false)}/> }
         <Talking />
       </Contents>
       <Bottom />

@@ -1,7 +1,7 @@
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { Wrapper, Header, Form, Input } from "./ui/login_ui";
 import { CircleX } from "lucide-react";
-import { createUserWithEmailAndPassword, type User } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile, type User } from "firebase/auth";
 import { auth } from "../firebase";
 import { toast } from "react-toastify";
 import { FirebaseError } from "firebase/app";
@@ -44,6 +44,10 @@ export default function Join({onClose,handleLogin}:JoinProps) {
           hideProgressBar: true,
           closeOnClick: true,
       });
+      //update user display name
+      updateProfile(userCredential.user,{
+          displayName: data.name
+      });
     }).catch((error) => {
       console.error(error.message)
       if(error instanceof FirebaseError){
@@ -72,9 +76,7 @@ export default function Join({onClose,handleLogin}:JoinProps) {
       </Header>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Input>
-          <label>이름</label>
-          <input
-            type="text"
+          <input type="text" placeholder="이름"
             {...register("name", {
               required: "이름을 입력해주세요",
               minLength: {
@@ -88,9 +90,7 @@ export default function Join({onClose,handleLogin}:JoinProps) {
             <p>{errors.name.message}</p>
           )}
         <Input>
-          <label>이메일</label>
-          <input
-            type="email"
+          <input type="email" placeholder="이메일"
             {...register("email", {
               required: "이메일을 입력해주세요",
               pattern: {
@@ -104,9 +104,7 @@ export default function Join({onClose,handleLogin}:JoinProps) {
             <p>{errors.email.message}</p>
           )}
         <Input>
-          <label>비밀번호</label>
-          <input
-            type="password"
+          <input type="password" placeholder="비밀번호"
             {...register("password", {
               required: "비밀번호를 입력해주세요",
               minLength: {
@@ -120,9 +118,7 @@ export default function Join({onClose,handleLogin}:JoinProps) {
             <p>{errors.password.message}</p>
           )}
         <Input>
-          <label>비밀번호 확인</label>
-          <input
-            type="password"
+          <input type="password" placeholder="비밀번호 확인"
             {...register("password_confirm", {
               required: "비밀번호를 다시 입력해주세요",
               minLength: {

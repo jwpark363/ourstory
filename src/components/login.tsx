@@ -60,9 +60,7 @@ export default function Login({onClose, handleLogin}:LoginProps) {
       </Header>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Input>
-        <label>E-Mail</label>
-        <input
-          type="email"
+        <input type="email" placeholder="이메일"
           {...register("email", {
             required: "이메일을 입력해주세요",
             pattern: {
@@ -76,9 +74,7 @@ export default function Login({onClose, handleLogin}:LoginProps) {
           <p>{errors.email.message}</p>
         )}
         <Input>
-        <label>Password</label>
-        <input
-          type="password"
+        <input type="password" placeholder="비밀번호"
           {...register("password", {
             required: "비밀번호를 입력해주세요",
             minLength: {
