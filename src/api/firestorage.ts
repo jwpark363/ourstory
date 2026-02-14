@@ -1,7 +1,9 @@
 import { deleteObject, getDownloadURL, ref, uploadBytes } from "firebase/storage"
 import { storage } from "../firebase"
+import { updateProfile, type User } from "firebase/auth"
 
 const IMAGE_STORAGE = "post_image"
+const AVATAR_STORAGE = "avatar_image"
 export const addFile = async (uid:string, doc_id:string, file:File) => {
     if(!file) return null;
     try{
@@ -26,4 +28,23 @@ export const deleteFile = async (uid:string, doc_id:string) => {
         console.log(err)
         throw err
     }
+}
+
+export const uploadAvatar = async (user:User | null, avatar:File) => {
+    if(!user) return null;
+    if(!avatar) return null;
+    try{
+        const _ref = ref(storage, `${AVATAR_STORAGE}/${user.uid}`)
+        const avatar_ref = await uploadBytes(_ref, avatar)
+        const avatar_url = await getDownloadURL(avatar_ref.ref)
+        console.log(avatar_ref, avatar_url)
+        await updateProfile(user, {
+            photoURL: avatar_url
+        })
+        return avatar_url
+    }catch(err){
+        console.log(err)
+        throw err
+    }
+    return null;
 }

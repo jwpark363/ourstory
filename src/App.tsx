@@ -10,7 +10,7 @@ import Bottom from "./components/bottom";
 import { ToastContainer } from "react-toastify";
 import { LibraryBig, Pencil, Plus } from "lucide-react";
 import Post from "./components/new_post";
-import { ConfirmProvider } from "./components/use-confirm__";
+import Profile from "./components/profile";
 const Wrapper = styled.div`
   position: relative;
   max-width: 800px;
@@ -57,6 +57,7 @@ function App() {
   const [is_login, setLogin] = useState(false)
   const [is_join, setJoin] = useState(false)
   const [is_post, setPost] = useState(false)
+  const [is_profile, setProfile] = useState(false)
   useEffect(() => {
     (async () => {
       await auth.authStateReady();
@@ -83,6 +84,7 @@ function App() {
     setLogin(false)
     setJoin(true)
   }
+  const openProfile = () => setProfile(prev => !prev)
   const onClose = () => {
     setLogin(false)
     setJoin(false)
@@ -90,7 +92,12 @@ function App() {
   }
   return (
     <Wrapper>
-      <Header user={user} openLogin={openLogin} openJoin={openJoin} onClose={onClose} handleLogout={handleLogout}/>
+      <Header user={user}
+        openLogin={openLogin} 
+        openJoin={openJoin}
+        openProfile={openProfile}
+        onClose={onClose}
+        handleLogout={handleLogout}/>
       <AddPostButton onClick={() => setPost(true)}>
         <Plus size={14} />
         <Pencil size={18} />
@@ -100,6 +107,7 @@ function App() {
         {is_login && <Login onClose={()=>setLogin(false)} handleLogin={handleLogin}/>}
         {is_join && <Join onClose={()=>setJoin(false)} handleLogin={handleLogin}/> }
         {is_post &&  <Post user={user} onClose={() => setPost(false)}/> }
+        {is_profile && <Profile /> }
         <Talking />
       </Contents>
       <Bottom />

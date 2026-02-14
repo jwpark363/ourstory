@@ -1,5 +1,5 @@
 import type { User } from "firebase/auth";
-import { LogIn, LogOut, UserPlus } from "lucide-react";
+import { LogIn, LogOut, User as Profile, UserPlus } from "lucide-react";
 import styled from "styled-components";
 import { auth } from "../firebase";
 import { toast } from "react-toastify";
@@ -31,10 +31,11 @@ interface HeaderProps{
     user: User | null
     openLogin: () => void
     openJoin: () => void
+    openProfile: () => void
     onClose: () => void
     handleLogout: () => void
 }
-export default function Header({ user, openLogin, openJoin, onClose, handleLogout } : HeaderProps){
+export default function Header({ user, openLogin, openJoin, openProfile, onClose, handleLogout } : HeaderProps){
     const logout = () => {
         (async () => {
             await auth.signOut()
@@ -54,16 +55,21 @@ export default function Header({ user, openLogin, openJoin, onClose, handleLogou
             </Title>
             <Menu>
             {user ? 
-                <Button onClick={logout}>
-                    <LogOut size={18}/>로그아웃
-                </Button>
+                <>
+                    <Button onClick={openProfile}>
+                        <Profile size={18} />Info
+                    </Button>
+                    <Button onClick={logout}>
+                        <LogOut size={18}/>Logout
+                    </Button>
+                </>
                 : 
                 <>
                     <Button onClick={openJoin}>
-                        <UserPlus size={18}/>합류하기
+                        <UserPlus size={18}/>Join
                     </Button>
                     <Button onClick={openLogin}>
-                        <LogIn size={18}/>로그인
+                        <LogIn size={18}/>Login
                     </Button>
                 </>
             }

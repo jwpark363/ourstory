@@ -5,7 +5,7 @@ import { auth } from "../firebase"
 import { useState } from "react"
 import UpdatePost from "./update_post"
 import { deleteImage, deletePost } from "../api/firestore"
-import { useConfirm } from "./use-confirm"
+import { useConfirm } from "./check-confirm"
 
 const Wrapper = styled.div`
     width: 100%;
@@ -78,14 +78,15 @@ export default function PostItem({item}:ItemProps){
     }
     const deleteAll = async (user_id:string, doc_id:string) => {
         console.log('delete message');
-        const ok = await confirm("정말 삭제하시겠습니까");
-        console.log(ok);
+        const ok = await confirm("삭제하시겠습니까?");
         if(ok)
             await deletePost(user_id, doc_id)
     }
     const deletePostImage = async (user_id:string, doc_id:string) => {
         console.log('delete image');
-        await deleteImage(user_id, doc_id)
+        const ok = await confirm("이미지만 삭제하시겠습니까?");
+        if(ok)
+            await deleteImage(user_id, doc_id)
     }
 return(
     <Wrapper>
@@ -116,6 +117,7 @@ return(
             </ContentWrapper>
         </ItemWrapper>
         {is_update && <UpdatePost post={item} onClose={() => setUpdate(false)}/>}
+        <ConfirmModal />
     </Wrapper>
 )
 }

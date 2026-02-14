@@ -4,8 +4,7 @@ import { useForm } from "react-hook-form";
 import { Wrapper, Form, Input } from "./ui/post_ui";
 import styled from "styled-components";
 import { Trash2 } from "lucide-react";
-import { addPost, updatePost } from "../api/firestore";
-import type { User } from "firebase/auth";
+import { updatePost } from "../api/firestore";
 import type { IPost } from "../types";
 import { auth } from "../firebase";
 
@@ -31,7 +30,7 @@ interface PostProps{
 export default function UpdatePost({post, onClose}:PostProps) {
     if(!auth.currentUser) return null;
 
-    const { register, resetField,handleSubmit, formState: { errors }, reset } = useForm<FormValues>({
+    const { register, resetField,handleSubmit, formState: { errors } } = useForm<FormValues>({
         defaultValues: {
             message: post.message,
             category: post.category
