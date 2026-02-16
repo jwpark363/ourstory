@@ -1,8 +1,10 @@
 import { addDoc, collection, deleteDoc, doc, FirestoreError, 
-    getDocs, orderBy, query, updateDoc } from "firebase/firestore";
+    getDocs, orderBy, query, updateDoc, 
+    where} from "firebase/firestore";
 import { db } from "../firebase";
 import type { IPost } from "../types";
 import { addFile, deleteFile } from "./firestorage";
+import { updateProfile, type User } from "firebase/auth";
 
 interface ErrorCodeMap{
     [key: string]: string;
@@ -35,14 +37,18 @@ export interface IResult{
     message: string | null
 }
 
-export const getPosts = async () => {
+export const getPosts = async (uid?:string) => {
     let result : IResult = {
         result: false,
         data: [],
         message: null
     }
     try{
-        const doc_query = query(
+        const doc_query = uid ? query(
+            collection(db,COLLECTION),
+            where("user_id","==",uid),
+            orderBy("created_at", "desc")
+        ) : query(
             collection(db,COLLECTION),
             orderBy("created_at", "desc")
         )
@@ -194,4 +200,21 @@ export const deleteImage = async (uid:string,doc_id:string) => {
         }       
     }
     return result;
+}
+
+export const updateName = async (user:User | null, user_name:string) => {
+    if(!user) return null;
+    const new_name = user_name.trim()
+    if(!Boolean(new_name)) return null;
+    if(new_name.length < 1) return null;
+    try{
+        await updateProfile(user, {
+            displayName: user_name
+        })
+        return user_name
+    }catch(err){
+        console.log(err)
+        throw err
+    }
+    return null;
 }

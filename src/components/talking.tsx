@@ -4,7 +4,7 @@ import PostItem from "./talking_item"
 import { useEffect, useState } from "react"
 import { getPosts } from "../api/firestore"
 import { collection, onSnapshot } from "firebase/firestore"
-import { db } from "../firebase"
+import { auth, db } from "../firebase"
 
 const Wrapper = styled.div`
     width: 100%;
@@ -14,11 +14,14 @@ const Wrapper = styled.div`
     margin-top: 12px;
     /* border-top: 1px solid ivory; */
 `
-export default function Talking(){
+interface TalkProps{
+    is_profile?:boolean
+}
+export default function Talking({is_profile}:TalkProps){
     const [items, setItems] = useState<IPost[]>([])
     const getPostList = ()=>{
         (async () => {
-            const results = await getPosts();
+            const results = await getPosts(is_profile?auth.currentUser?.uid:undefined);
             if(results.result){
                 setItems(results.data)
             }
@@ -31,7 +34,7 @@ export default function Talking(){
       getPostList()
     });
     return () => unsubscribe();
-  }, []);
+  }, [is_profile]);
     return(
         <Wrapper>
             {items.map((item,idx) => <PostItem key={idx} item={item}/>)}

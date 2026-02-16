@@ -1,5 +1,5 @@
 import type { User } from "firebase/auth";
-import { LogIn, LogOut, User as Profile, UserPlus } from "lucide-react";
+import { LogIn, LogOut, User as Profile, UserPlus, Users } from "lucide-react";
 import styled from "styled-components";
 import { auth } from "../firebase";
 import { toast } from "react-toastify";
@@ -29,13 +29,14 @@ const Button = styled.div`
 `
 interface HeaderProps{
     user: User | null
+    is_profile: boolean
     openLogin: () => void
     openJoin: () => void
     openProfile: () => void
     onClose: () => void
     handleLogout: () => void
 }
-export default function Header({ user, openLogin, openJoin, openProfile, onClose, handleLogout } : HeaderProps){
+export default function Header({ user, is_profile, openLogin, openJoin, openProfile, onClose, handleLogout } : HeaderProps){
     const logout = () => {
         (async () => {
             await auth.signOut()
@@ -57,7 +58,10 @@ export default function Header({ user, openLogin, openJoin, openProfile, onClose
             {user ? 
                 <>
                     <Button onClick={openProfile}>
-                        <Profile size={18} />Info
+                        {is_profile ?
+                            <><Users size={18} />All</> :
+                            <><Profile size={18} />My</>
+                        }
                     </Button>
                     <Button onClick={logout}>
                         <LogOut size={18}/>Logout

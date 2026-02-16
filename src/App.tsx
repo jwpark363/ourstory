@@ -93,6 +93,7 @@ function App() {
   return (
     <Wrapper>
       <Header user={user}
+        is_profile={is_profile}
         openLogin={openLogin} 
         openJoin={openJoin}
         openProfile={openProfile}
@@ -103,12 +104,14 @@ function App() {
         <Pencil size={18} />
       </AddPostButton>
       <Contents>
-        <h1><LibraryBig size={24}/> 우리들의 이야기</h1>
+        <h1>
+        {is_profile ? <Profile /> : <><LibraryBig size={24}/> 우리들의 이야기</>}
+        </h1>
         {is_login && <Login onClose={()=>setLogin(false)} handleLogin={handleLogin}/>}
         {is_join && <Join onClose={()=>setJoin(false)} handleLogin={handleLogin}/> }
         {is_post &&  <Post user={user} onClose={() => setPost(false)}/> }
-        {is_profile && <Profile /> }
-        <Talking />
+        {/* {is_profile && <Profile /> } */}
+        <Talking is_profile={is_profile}/>
       </Contents>
       <Bottom />
       <ToastContainer />
